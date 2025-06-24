@@ -1,14 +1,13 @@
 // export const dynamic = 'force-static'
 
 import mysql from 'mysql2/promise';
+import {connectionConfig} from "@/app/api/config";
 
-const connectionConfig = {
-  host: 'localhost',
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
+interface Row {
+  id: number;
 }
 
+type Count = { 'COUNT(*)': number };
 export async function GET() {
 
   const SQL = `SELECT a.*,
@@ -26,16 +25,18 @@ export async function GET() {
   // todo - switch to pool
   const connection = await mysql.createConnection(connectionConfig)
 
-  const TEST_SQL = 'SELECT * from fighters where id = 1';
+  // const TEST_SQL = 'SELECT * from fighters where id = 1';
 
-  const [rows] = await connection.execute(SQL);
+  const queryResult = await connection.execute(SQL);
+  const [rows] = queryResult;
 
-  const [[q]] = await connection.execute('SELECT COUNT(*) FROM fighters');
-  console.log(q)
+  const countResult = await connection.execute('SELECT COUNT(*) FROM fighters');
+  const [countRows] = countResult;
+  const [q] = countRows as [Count];
 
   return new Response(JSON.stringify({
     total: Object.values(q)[0],
-    count: rows.length,
+    count: (rows as Row[]).length,
     fighters: rows,
   }), {
     status: 200,

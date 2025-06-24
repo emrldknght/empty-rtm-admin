@@ -1,4 +1,5 @@
 import {FighterRaw} from "@/types";
+import {Container} from "@mantine/core";
 
 interface Props {
   fighters: FighterRaw[]
@@ -6,7 +7,8 @@ interface Props {
 
 const Fighters = ({ fighters }: Props ) => {
   return (
-    <div>
+    <>
+      <Container>
       <h1>Fighters</h1>
       <ul>
         {
@@ -17,7 +19,8 @@ const Fighters = ({ fighters }: Props ) => {
           ))
         }
       </ul>
-    </div>
+      </Container>
+    </>
   )
 }
 

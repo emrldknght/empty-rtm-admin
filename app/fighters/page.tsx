@@ -2,18 +2,13 @@
 
 import useAuthStore from "@/stores/authStore";
 import useFightersStore from "@/stores/fightersStore";
-import {redirect} from "next/navigation";
 import React, {useEffect} from "react";
 import Fighters from "@/components/Fighters";
+import {CommonLoader} from "@/components/CommonLoader";
 
 export default function FightersPage() {
-  const { authToken,logOut } = useAuthStore();
+  const { authToken } = useAuthStore();
   const { fighters, fetch } = useFightersStore();
-
-  if (!authToken) {
-    console.warn('no auth')
-    // return redirect('/auth');
-  }
 
   useEffect(() => {
     console.log('token', authToken)
@@ -22,6 +17,12 @@ export default function FightersPage() {
   useEffect(() => {
     fetch();
   }, []);
+
+  if (!authToken) {
+    return (
+      <CommonLoader />
+    )
+  }
 
   return (
     <>

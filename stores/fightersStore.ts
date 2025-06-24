@@ -8,15 +8,17 @@ interface FightersStore {
 
 interface FightersGet {
   fighters: FighterRaw[];
+  count: number;
+  total: number;
 }
 
-const useFightersStore = create<FightersStore>()((set, get) => ({
+const useFightersStore = create<FightersStore>()((set, _get) => ({
   fighters: [],
 
   fetch: async () => {
     const response = await fetch('/api/fighters');
 
-    const data = await response.json();
+    const data: FightersGet = await response.json();
     const { fighters } = data
 
     console.log('f:', fighters);
